@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Travel Mate Archive</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:Pretendard, sans-serif;
+  background:#000;
+  overflow:hidden;
+}
+
+/* 배경 */
+#login{
+  position:fixed;
+  inset:0;
+  background:url("background.jpg") center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.overlay{
+  background:rgba(0,0,0,.28);
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:320px;
+  text-align:center;
+  color:white;
+}
+
+h1{
+  font-size:28px;
+  letter-spacing:2px;
+  margin-bottom:10px;
+}
+
+.sub{
+  font-size:13px;
+  opacity:.8;
+  margin-bottom:28px;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(10px);
+  color:white;
+  font-size:15px;
+  text-align:center;
+  outline:none;
+}
+
+input::placeholder{
+  color:rgba(255,255,255,.7);
+}
+
+button{
+  width:100%;
+  margin-top:14px;
+  padding:15px;
+  border:none;
+  border-radius:999px;
+  background:white;
+  color:black;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.error{
+  color:#ffd5d5;
+  margin-top:12px;
+  font-size:13px;
+  height:18px;
+}
+
+/* 갤러리 */
+#gallery{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000;
+}
+
+.slide{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:34px;
+  color:white;
+  background:rgba(0,0,0,.25);
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  user-select:none;
+}
+
+.prev{left:18px;}
+.next{right:18px;}
+
+.count{
+  position:absolute;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%);
+  color:white;
+  font-size:14px;
+  background:rgba(0,0,0,.35);
+  padding:8px 14px;
+  border-radius:20px;
+}
+</style>
+</head>
+
+<body>
+
+<section id="login">
+  <div class="overlay">
+    <div class="box">
+      <h1>TRAVEL MATE</h1>
+      <p class="sub">암호를 입력하면 아카이브가 열립니다.</p>
+
+      <input id="pw" placeholder="PASSWORD"/>
+      <button onclick="checkPassword()">ENTER</button>
+
+      <div class="error" id="error"></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <img id="photo" class="slide" src="">
+  <div class="nav prev" onclick="prev()">‹</div>
+  <div class="nav next" onclick="next()">›</div>
+  <div class="count"><span id="current"></span> / <span id="total"></span></div>
+</section>
+
+<script>
+const PASSWORD = "MIWANSEONG"; // 원하는 암호로 변경
+
+const images = [
+  "images/01.jpg",
+  "images/02.jpg",
+  "images/03.jpg",
+  "images/04.jpg"
+];
+
+let index = 0;
+
+function checkPassword(){
+  const value = document.getElementById("pw").value.trim();
+
+  if(value === PASSWORD){
+    document.getElementById("login").style.display="none";
+    document.getElementById("gallery").style.display="block";
+    showImage();
+  }else{
+    document.getElementById("error").innerText="암호가 올바르지 않습니다.";
+  }
+}
+
+function showImage(){
+  document.getElementById("photo").src = images[index];
+  document.getElementById("current").innerText = index + 1;
+  document.getElementById("total").innerText = images.length;
+}
+
+function next(){
+  index = (index + 1) % images.length;
+  showImage();
+}
+
+function prev(){
+  index = (index - 1 + images.length) % images.length;
+  showImage();
+}
+
+document.getElementById("pw").addEventListener("keydown",(e)=>{
+  if(e.key==="Enter") checkPassword();
+});
+</script>
+
+</body>
+</html>
